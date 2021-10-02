@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="assets/logo.ico" type="image/x-icon">
+
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/mycss.css" rel="stylesheet">
+  <link href="css/dark-mode.css" rel="stylesheet">
+
+  <script src="js/jquery-3.5.1.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/all.min.js"></script>
+
+
+  <title>Simple Tunnel 936</title>
+</head>
+
+<body>
+  <div class="container">
+    <header class="mb-auto">
+      <h3 class="text-center">Simple Tunnel</h3>
+      <p class="text-muted text-center">▀▄▀▄▀▄ @pigscanfly ▄▀▄▀▄▀</p>
+      <nav class="nav justify-content-center float-right">
+        <a class="nav-link active" href="#">OpenVPN</a>
+        <a class="nav-link " href="#">SSH</a>
+        <a class="nav-link " href="#">Options</a>
+        <a class="nav-link " href="#">Help</a>
+        <a class="nav-link " href="#">About</a>
+        <!-- <a class="nav-link" href="https://github.com/stein-dev" target="_blank">GitHub</a> -->
+        <div class="nav-link">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="darkSwitch">
+            <label class="form-check-label" for="darkSwitch">Dark Mode</label>
+          </div>
+          <script src="js/dark-mode-switch.min.js"></script>
+
+        </div>
+      </nav>
+    </header>
+
+    <div class="row">
+      <!-- Column 1 -->
+      <div class="col-sm-6">
+        <div class="card h-100">
+          <div class="card-body">
+
+            <!-- Payload -->
+            <h6 id="title_payload">Payload</h6>
+            <div class="input-group mb-2">
+              <textarea class="form-control" id="text_payload" placeholder="HTTP//1.1 200 [lf]Host: www.xbox.com [lf][lf][lf]"></textarea>
+            </div>
+
+            <!-- Remote Proxy -->
+            <h6 id="title_rp">Remote Proxy</h6>
+            <!-- <div class="input-group mb-2">
+              <input type="text" class="form-control input-sm" id="rhost" placeholder="Proxy Host" aria-label="Proxy Host">
+              <span class="input-group-text" id="sep">:</span>
+              <input type="text" class="form-control input-sm" id="rport" placeholder="Proxy Port" aria-label="Proxy Port">
+            </div> -->
+
+            <div class="input-group mb-2">
+              <span class="input-group-text" id="label_rhost">Host&nbsp;</span>
+              <input type="text" id="input_rhost" placeholder="127.0.0.1" class="form-control"
+                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+
+              <span class="input-group-text" id="label_rport">Port&nbsp;</span>
+              <input type="text" id="input_rport" placeholder="3128" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm">
+            </div>
+
+            <!-- Option -->
+            <h6 id="title_option">Option</h6>
+            <div class="input-group mb-2">
+              <span class="input-group-text" id="label_lport">LPort</span>
+              <input type="text" id="input_lport" placeholder="9292" class="form-control"
+                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+
+              <span class="input-group-text" id="label_timer">Timer</span>
+              <input type="text" id="input_timer" placeholder="0" class="form-control" aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm">
+
+            </div>
+
+            <!-- Tunnel mode -->
+            <div class="input-group mb-2" id="radio_mode">
+              <input class="btn-check" type="radio" name="mode" id="radio_injector" checked>
+              <label class="btn btn-outline-primary btn-sm" for="radio_injector">Injector Mode</label>
+              <input class="btn-check" type="radio" name="mode" id="radio_direct" >
+              <label class="btn btn-outline-primary btn-sm" for="radio_direct">Direct Mode</label>
+            </div>
+
+            <!-- Upload OpenVPN Config -->
+            <h6 id="title_openvpn">OpenVPN</h6>
+            <form action="/cgi-bin/upload_config.cgi" method=post enctype="multipart/form-data">
+              <div class="input-group mb-2" id="div_upload_config">
+                <!-- <input class="form-control" type=file name="upload_config" id="input_upload_config" accept=".ovpn"> -->
+                <!-- <button class="btn btn-outline-primary btn-sm" type=submit id="btn_upload">Upload</button> -->
+
+                <div class="fileUpload btn btn-outline-primary" id="div_upload">
+                  <span id="label_choose_file">Choose File</span>
+                  <input type="file" onchange="validateFile(this)" name="upload_config" id="input_upload_config" accept=".ovpn" class="upload" />
+                </div>
+                <input class="form-control" id="input_disabled" placeholder="No file chosen"
+                  disabled="disabled" />
+                <button class="btn btn-outline-primary btn-sm" id="btn_upload" type="submit">
+                  Upload
+                </button>
+              </div>
+            </form>
+
+            <!-- Config List -->
+            <form action="" method=post enctype="multipart/form-data">
+              <div class="input-group mb-2">
+                <label class="input-group-text btn btn-outline-primary" id="label_config">Config List</label>
+                <select class="form-select" id="sel_config_list"></select>
+                <!-- Edit/Delete config -->
+                <button class="btn btn-outline-primary btn-sm" id="btn_edit_config" type="button">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" type="submit" id="btn_delete">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </form>
+
+            <!-- OpenVPN User/Pass -->
+            <div class="input-group mb-2">
+              <input type="text" class="form-control" id="input_user" placeholder="Username" aria-label="Username">
+              <span class="input-group-text" id="label_sep">:</span>
+              <input type="password" class="form-control" id="input_pass" placeholder="Password" aria-label="Password">
+            </div>
+
+            <!-- Connect/Disconnect -->
+            <div class="btn-group d-flex mb-2">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-save"></i> Save
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="btn_connect" type="button">
+                <i class="fa fa-play"></i> Connect
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="btn_disconnect" type="button">
+                <i class="fa fa-stop"></i> Disconnect
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="col-sm-6">
+        <div class="card h-100">
+          <div class="card-body">
+
+            <!-- Logs -->
+            <h6 id="title_logs">Logs</h6>
+            <div class="input-group mb-2">
+              <textarea readonly rows="9" class="form-control" id="logs"></textarea>
+            </div>
+
+            <!-- Logs Function -->
+            <div class="btn-group text-center mb-2" id="logs_function">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-eraser"></i> Clear Logs
+              </button>
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-copy"></i> Copy Logs
+              </button>
+            </div>
+
+            <!-- Status -->
+            <h6 id="title_status">Status</h6>
+            <div id="status_list">
+              <div class="row">
+                <div class="col-sm-6 mb-2">
+                  <ul class="list-group list-group-md">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      WAN IP Address
+                      <span class="badge bg-primary rounded-pill" id="wan_info">127.0.0.1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      VPN IP Address
+                      <span class="badge bg-primary rounded-pill">127.0.0.1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      OpenVPN Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Injector Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+
+                  </ul>
+                </div>
+
+                <div class="col-sm-6">
+                  <ul class="list-group list-group-sm">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Memory
+                      <span class="badge bg-primary rounded-pill" id="mem_info"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      CPU
+                      <span class="badge bg-primary rounded-pill" id="cpu_info"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      OpenVPN Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Injector Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                  </ul>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Misc Function -->
+            <!-- <div class="btn-group" id="misc_function">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-exchange-alt"></i> Change IP
+              </button>
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-redo"></i> Reboot
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="myBtn" type="button">
+                <i class="fa fa-power-off"></i> Power Off
+              </button>
+            </div> -->
+
+            <div id="toast_alert1" class="toast d-flex align-items-center text-white bg-success border-0" 
+            role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 0; right: 0;">
+              <div class="toast-body" id="toast_msg1">
+                
+              </div>
+            </div>
+
+            <div id="toast_alert2" class="toast d-flex align-items-center text-white bg-danger border-0" 
+            role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 0; right: 0;">
+              <div class="toast-body" id="toast_msg2">
+                
+              </div>
+            </div>
+
+            <!-- Edit OpenVPN Config Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog modal-lg" id="modal_body">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Edit OpenVPN Config</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label class="col-form-label">OpenVPN Config Name:
+                          <span class="badge bg-primary" id="file_name"></span>
+                        </label>
+                        <textarea rows="5" class="form-control" id="text_config"></textarea>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="modal_close" data-dismiss="modal">Close</button>
+                    <form action="" method=post enctype="multipart/form-data">
+                      <button type="submit" class="btn btn-primary" id="btn_save_edit">Save</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    load_config();
+
+    // load config list
+    function load_config() {
+      $.get("/cgi-bin/config_list.cgi", function (data) {
+        var str = data.split("\n");
+        console.log(str);
+        var i = 0;
+        $('#sel_config_list').empty();
+        for (i = 0; i < str.length; i++) {
+          if (str[i].indexOf('ovpn') >= 0) {
+            console.log(str[i])
+            $('#sel_config_list').append($('<option value="' + i + '">' + str[i] + '</option>'));
+          }
+        }
+      });
+    }
+
+    function validateFile(fileInput) {
+        var files = fileInput.files;
+        if (files.length === 0) {
+            return;
+        }
+
+        var fileName = files[0].name;
+        if (fileName.length > 15) {
+            console.log("Too many")
+        }
+    }
+
+    // show alert toast
+    function show_alert(message, type) {
+      if (type == "success") {
+        $("#toast_msg1").text(message);
+        $("#toast_alert1").toast("show");
+      } else if (type == "danger") {
+        $("#toast_msg2").text(message);
+        $("#toast_alert2").toast("show");
+      }
+    }
+
+    /* remove fakepath */
+    document.getElementById("input_upload_config").onchange = function () {
+      var str = this.value.replace("C:\\fakepath\\", "");
+      document.getElementById("input_disabled").value = str;
+    };
+
+    // close modal
+    $("#myBtn").click(function () {
+      $('.toast').toast('show');
+    });
+
+    // hide edit modal
+    $("#modal_close").click(function () {
+      $("#myModal").modal("hide");
+    });
+
+    // view edit modal
+    $("#btn_edit_config").click(function () {
+      sel_config = $('#sel_config_list option:selected').text();
+      if (sel_config == "") {
+        return
+      }
+      $("#myModal").modal("show");
+      
+      document.getElementById('file_name').innerHTML = sel_config;
+
+      $.ajax({
+          url: "/config/" + sel_config,
+          method: "GET",
+          cache: false,
+          success: function (data) {
+            $("#text_config").val(data);
+          }
+        })
+    });
+
+    // save edit config
+    $('#btn_save_edit').click(function (e) {
+      e.preventDefault();
+
+      var a = $("#text_config").val();
+
+      if (a == "") {
+        $("#myModal").modal("hide");
+        return
+      }
+
+      // if( a == "") {
+      //   $("#myModal").modal("hide");
+      //   show_alert("Error. File can't be saved.", "danger")
+      //   return
+      // }
+
+      // var  b = a.includes("<br>");
+      // console.log(b);
+      // if( b == false) {
+      //   $("#myModal").modal("hide");
+      //   show_alert("Error. File can't be saved.", "danger")
+      //   return
+      // }
+      
+      var c = a.replace(/\n/g, '<br>');
+      sel_config = $('#sel_config_list option:selected').text();
+
+      console.log(c)
+
+      $.ajax({
+        type: "POST",
+        url: "/cgi-bin/save_edit_config.cgi",
+        data: c + sel_config,
+        cache: false,
+        success: function () {
+          load_config();
+          $("#myModal").modal("hide");
+        }
+      });
+    });
+
+    // Delete config
+    $('#btn_delete').click(function (e) {
+
+      e.preventDefault();
+      sel_config = $('#sel_config_list option:selected').text();
+
+      if (sel_config == "") {
+        show_alert("Nothing to delete!", "danger");
+        return
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/cgi-bin/delete_config.cgi",
+        data: sel_config,
+        cache: false,
+        success: function () {
+          show_alert("Config " + sel_config + " was deleted successfully!", "success");
+          load_config();
+        }
+      });
+    });
+
+    // Tunnel Mode
+    $('#radio_mode').change(function(){
+      var dm = document.getElementById('radio_direct').checked;
+      var im = document.getElementById('radio_injector').checked;
+
+      if (dm) {
+        //$('#payload').prop("disabled", true);
+        document.getElementById("text_payload").disabled = true;
+        document.getElementById("input_rhost").disabled = true;
+        document.getElementById("input_rport").disabled = true;
+        document.getElementById("input_lport").disabled = true;
+        document.getElementById("input_timer").disabled = true;
+      }
+      if (im) {
+        document.getElementById("text_payload").disabled = false;
+        document.getElementById("input_rhost").disabled = false;
+        document.getElementById("input_rport").disabled = false;
+        document.getElementById("input_lport").disabled = false;
+        document.getElementById("input_timer").disabled = false;
+        
+      }
+    });
+
+    // Connect
+    $('#btn_connect').click(function (e) {
+
+    });
+
+    //get memory info
+    setInterval(function () {
+      $("#mem_info").load("/cgi-bin/mem_info.cgi")
+    }, 1000);
+
+    //get wan info
+    setInterval(function () {
+      $("#wan_info").load("/cgi-bin/wan_info.cgi")
+    }, 1000);
+
+
+    setInterval(function () {
+      $.get("/cgi-bin/cpu_usage.cgi", function (data) {
+        console.log(data);
+        document.getElementById('cpu_info').innerHTML = data;
+      });
+    }, 1000);
+    
+    // function cpu_usage() {
+    //   $.get("/cgi-bin/cpu_usage.cgi", function (data) {
+    //     var str = data.split("\n");
+    //     console.log(str);
+    //   });
+    // }
+
+    //get cpu info
+    //$("#cpu_info").load("/cgi-bin/cpu_usage.cgi")
+  </script>
+</body>
+
+</html>

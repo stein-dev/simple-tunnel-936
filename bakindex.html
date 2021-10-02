@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="assets/logo.ico" type="image/x-icon">
+
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/mycss.css" rel="stylesheet">
+
+  <script src="js/jquery-3.5.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/all.min.js"></script>
+
+  <title>Simple Tunnel 936</title>
+</head>
+
+<body>
+
+
+
+  <div class="container">
+    <!-- Header -->
+    <div class="row">
+      <div class="col-sm-12">
+        
+          <h2 class="text-center">SIMPLE TUNNEL 936</h2>
+        
+        <p class="text-muted text-center">▀▄▀▄▀▄ @pigscanfly ▄▀▄▀▄▀</p>
+        
+        <h4 class="card-title text-center"></h4>
+        <h6 class="small text-muted text-center"></h6>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Column 1 -->
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+
+            <!-- Payload -->
+            <h6 class="text-muted">Payload</h6>
+            <div class="input-group">
+              <textarea class="form-control" id="payload"
+                placeholder="HTTP//1.1 200 [lf]Host: www.xbox.com [lf][lf][lf]"></textarea>
+            </div>
+
+            <!-- Remote Proxy -->
+            <h6 class="text-muted">Remote Proxy</h6>
+            <div class="input-group mb-2">
+              <input type="text" class="form-control input-sm" placeholder="Proxy Host" aria-label="Proxy Host">
+              <span class="input-group-text">:</span>
+              <input type="text" class="form-control input-sm" placeholder="Proxy Port" aria-label="Proxy Port">
+            </div>
+
+            <!-- Tunnel mode -->
+            <div class="input-group" id="radio_mode">
+              <input class="btn-check" type="radio" name="options" id="option1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary btn-sm" for="option1">Injector + OpenVPN</label>
+              <input class="btn-check" type="radio" name="options" id="option2" autocomplete="off">
+              <label class="btn btn-outline-primary btn-sm" for="option2">Direct (OpenVPN)</label>
+            </div>
+
+            <!-- Upload OpenVPN Config -->
+            <h6 class="text-muted">OpenVPN</h6>
+            <form action="/cgi-bin/upload5.cgi" method=post enctype="multipart/form-data">
+              <div class="input-group mb-3" id="div_upload_config">
+                <input class="form-control" type=file name="upload_config" id="input_upload_config" accept=".ovpn">
+                <button class="btn btn-outline-primary btn-sm" type=submit>Upload</button>
+              </div>
+            </form>
+
+            <!-- Config List -->
+            <form action="" method=post enctype="multipart/form-data">
+              <div class="input-group mb-3">
+                <label class="input-group-text">Config List&nbsp;&nbsp;</label>
+                <select class="form-select" id="config_list"></select>
+                <!-- Edit/Delete config -->
+                <button class="btn btn-outline-primary btn-sm" id="btn_edit_config" type="button">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" type="submit" id="btn_delete">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </form>
+
+            <!-- OpenVPN User/Pass -->
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+              <span class="input-group-text">:</span>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password">
+            </div>
+
+            <!-- Connect/Disconnect -->
+            <div class="btn-group d-flex">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-save"></i> Save
+              </button>
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-play"></i> Connect
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="btn_disconnect" type="button">
+                <i class="fa fa-stop"></i> Disconnect
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+
+            <!-- Logs -->
+            <h6 class="text-muted">Logs</h6>
+            <div class="input-group">
+              <textarea readonly rows="8" class="form-control" id="logs"></textarea>
+            </div>
+
+            <!-- Logs Function -->
+            <div class="btn-group text-center" id="logs_function">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-eraser"></i> Clear Logs
+              </button>
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-copy"></i> Copy Logs
+              </button>
+            </div>
+
+            <!-- Status -->
+            <h6 class="text-muted">Status</h6>
+            <div id="status_list">
+              <div class="row">
+                <div class="col-sm-6">
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      WAN IP Address
+                      <span class="badge bg-primary rounded-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      VPN IP Address
+                      <span class="badge bg-primary rounded-pill">2</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      OpenVPN Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      Injector Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-sm-6">
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      Memory
+                      <span class="badge bg-primary rounded-pill" id="mem_info"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      CPU
+                      <span class="badge bg-primary rounded-pill" id="cpu_info"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      OpenVPN Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center small">
+                      Injector Status
+                      <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                  </ul>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Misc Function -->
+            <div class="btn-group" id="misc_function">
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-exchange-alt"></i> Change IP
+              </button>
+              <button class="btn btn-outline-primary btn-sm" type="button">
+                <i class="fa fa-redo"></i> Reboot
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="myBtn" type="button">
+                <i class="fa fa-power-off"></i> Power Off
+              </button>
+            </div>
+
+            <!-- Toast Alert -->
+            <div class="toast" id="toast_alert" role="alert" data-delay="0"
+              style="position: absolute; top: 0; right: 0;">
+              <div class="toast-header">
+                Simple Tunnel 936
+              </div>
+              <div class="toast-body">
+                <p id="toast_msg"></p>
+              </div>
+            </div>
+
+            <!-- Edit OpenVPN Config Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Edit OpenVPN Config</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label class="col-form-label">OpenVPN Config Name:
+                          <span class="badge bg-primary" id="file_name"></span>
+                        </label>
+                        <textarea rows="5" class="form-control" id="config_text"></textarea>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="modal_close" data-dismiss="modal">Close</button>
+                    <form action="" method=post enctype="multipart/form-data">
+                      <button type="submit" class="btn btn-primary" id="btn_save_edit">Save</button>
+                    </form>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    var sel_config = ""
+    var folder = "./config/";
+
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+
+    load_config();
+
+    function load_config() {
+      $.get("/cgi-bin/config_list.cgi", function (data) {
+        var str = data.split("\n");
+        console.log(str);
+        var i = 0;
+        $('#config_list').empty();
+        for (i = 0; i < str.length; i++) {
+          if (str[i].indexOf('ovpn') >= 0) {
+            console.log(str[i])
+            $('#config_list').append($('<option value="' + i + '">' + str[i] + '</option>'));
+          }
+        }
+      });
+    }
+
+    function show_alert(message) {
+      $("#toast_msg").text(message);
+      $("#toast_alert").toast("show");
+    }
+
+    //close modal
+    $("#myBtn").click(function () {
+      $('.toast').toast('show');
+    });
+
+    // Hide edit modal
+    $("#modal_close").click(function () {
+      $("#myModal").modal("hide");
+    });
+
+    //View config editor
+    // $("#btn_edit_config").click(function () {
+    //     $("#myModal").modal("show");
+    //     sel_config = $('#config_list option:selected').text();
+    //     document.getElementById('file_name').innerHTML = sel_config;
+
+    //     $.get(folder + sel_config ,function (data) {
+    //       console.log(data)
+    //       $("#config_text").val(data);
+    //       //document.getElementById('config_text').innerHTML = data;
+    //     }, 'text');
+
+    // });
+
+    $("#btn_edit_config").click(function () {
+      $("#myModal").modal("show");
+      sel_config = $('#config_list option:selected').text();
+      document.getElementById('file_name').innerHTML = sel_config;
+
+      $.ajax({
+          url: "/config/" + sel_config,
+          method: "GET",
+          cache: false,
+        })
+        .done(function (data) {
+          console.log("Successfully fetched data.");
+          $("#config_text").val(data);
+        })
+        .fail(function (data) {
+          console.log("Error in fetching data");
+        })
+    });
+
+
+
+    //get memory info
+    setInterval(function () {
+      $("#mem_info").load("/cgi-bin/mem_info.cgi")
+    }, 1000);
+
+    //get cpu info
+    $("#cpu_info").load("/cgi-bin/cpu_info.cgi")
+
+    // Save edit config
+    $('#btn_save_edit').click(function (e) {
+      e.preventDefault();
+      var a = $("#config_text").val().replace(/\n/g, '<br>');
+      console.log(a)
+
+      sel_config = $('#config_list option:selected').text();
+
+      $.ajax({
+        type: "POST",
+        url: "/cgi-bin/save_edit_config.cgi",
+        data: a + sel_config,
+        cache: false,
+        success: function () {
+          //$('#config_list').empty();
+          //load_config();
+          $("#myModal").modal("hide");
+        }
+      });
+
+    });
+
+    // Delete config
+    $('#btn_delete').click(function (e) {
+      $("#config_list option[value='duterte.ovpn']").remove();
+      e.preventDefault();
+      sel_config = $('#config_list option:selected').text();
+
+      $.post("/cgi-bin/delete_config.cgi", sel_config, function () {
+
+        if (sel_config == "") {
+          $("#toast_msg").text("Nothing to delete.");
+          $("#toast_alert").toast("show");
+        } else {
+          load_config();
+          $("#toast_msg").text("Config " + sel_config + " deleted");
+          $("#toast_alert").toast("show");
+        }
+      });
+
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/cgi-bin/delete_config.cgi",
+      //   data: sel_config,
+      //   success: function() {
+      //       document.getElementById('config_text').innerHTML = "";
+      //       $('option:selected', this).remove();
+      //       load_config()
+      //       //$("#config_list option[value='" + sel_config + "']").remove();
+      //       alert("Deleted")
+      //       // $( "#config_list" ).load(window.location.href + " #config_list" );
+      //   }
+      // });        
+    });
+
+
+
+    $('#btn_disconnect').click(function () {
+      sel_config = $('#config_list option:selected').text();
+      console.log(sel_config)
+    })
+  </script>
+</body>
+
+</html>

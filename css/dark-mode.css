@@ -1,0 +1,188 @@
+[data-theme="dark"] {
+  background-color: #0f0e17 !important;
+  color: #a7a9be;
+}
+
+/* [data-theme="dark"] .bg-light {
+  background-color: #a7a9be !important;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: #000 !important;
+}
+
+[data-theme="dark"] .bg-black {
+  background-color: #a7a9be !important;
+} */
+
+[data-theme="dark"] .card {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 3px;
+}
+
+/* Payload */
+[data-theme="dark"] #title_payload {
+  color: white; 
+}
+[data-theme="dark"] #text_payload {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* ===================================== */
+
+/* Remote Proxy */
+[data-theme="dark"] #title_rp {
+  color: white; 
+}
+[data-theme="dark"] #label_rhost {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #input_rhost {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #label_rport {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #input_rport {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* =========================================*/
+
+/* Options */
+[data-theme="dark"] #title_option {
+  color: white; 
+}
+[data-theme="dark"] #label_lport {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #input_lport {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #label_timer {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #input_timer {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* ======================================= */
+
+/* OpenVPN Upload */
+[data-theme="dark"] #title_openvpn {
+  color: white; 
+}
+[data-theme="dark"] #input_disabled {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white;
+}
+[data-theme="dark"] #div_upload {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white;
+}
+/* ======================================== */
+
+/* Config List */
+[data-theme="dark"] #label_config {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white;
+}
+[data-theme="dark"] #sel_config_list {
+  background-color: #0f0e17 !important;
+  border-color: black;
+  border-width: 2px;
+  color: white;
+}
+/* ========================================= */
+
+/* User/Pass */
+[data-theme="dark"] #input_user {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #label_sep {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #input_pass {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* ========================================= */
+
+/* Logs */
+[data-theme="dark"] #title_logs {
+  color: white; 
+}
+[data-theme="dark"] #logs {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* =========================================== */
+
+/* Status */
+[data-theme="dark"] #title_status {
+  color: white; 
+}
+[data-theme="dark"] .list-group-item {
+  background-color: transparent !important;
+  border-color: black;
+  color: white; 
+}
+/* ============================================ */
+
+/* Edit config modal */
+[data-theme="dark"] .modal-content {
+  background-color: #0f0e17 !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+[data-theme="dark"] #text_config {
+  background-color: transparent !important;
+  border-color: black;
+  border-width: 2px;
+  color: white; 
+}
+/* ============================================== */
+
+/* Loader */
